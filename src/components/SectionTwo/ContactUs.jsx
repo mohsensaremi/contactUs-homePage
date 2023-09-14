@@ -1,19 +1,19 @@
 import {
-  FlexGrid,
-  Grid,
-  Row,
-  Column,
-  Section,
-  Heading,
-  FluidForm,
-  unstable__FluidTextInput as FluidTextInput,
-  unstable__FluidSelect as FluidSelect,
-  SelectItem,
   Button,
+  Column,
+  FlexGrid,
+  FluidForm,
+  unstable__FluidSelect as FluidSelect,
+  unstable__FluidTextInput as FluidTextInput,
+  Grid,
+  Heading,
+  Row,
+  Section,
+  SelectItem,
 } from "@carbon/react";
 import { ArrowRight } from "@carbon/react/icons";
-import "../SectionTwo/ContactUs.style.scss";
 import { useState } from "react";
+import "../SectionTwo/ContactUs.style.scss";
 
 const ContactForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -24,11 +24,9 @@ const ContactForm = () => {
   const [textDescription, setTextDescription] = useState("");
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const [validForm, setValidForm] = useState(false);
 
   const handleSubmit = () => {
-    setValidForm(true);
-
+    let errors = {};
     if (firstName.length == 0) {
       errors.firstName = "Invalid Form, first name is required";
     } else if (!firstName.match("^[a-zA-Z]+$")) {
@@ -48,7 +46,7 @@ const ContactForm = () => {
       console.log(errors.email);
     }
 
-    if (!mobile.match("^\\d*$")) {
+    if (!mobile.match("^\\d+$")) {
       errors.mobile = "enter valid number";
       console.log(errors.mobile);
     }
@@ -56,7 +54,7 @@ const ContactForm = () => {
     if (textDescription.length == 0) {
       errors.textDescription = "write message";
     }
-    return errors;
+    setErrors(errors);
   };
 
   // const handleSubmit = (e) => {
@@ -101,7 +99,7 @@ const ContactForm = () => {
                   <FluidTextInput
                     labelText="First Name"
                     placeholder="James"
-                    warn={validForm}
+                    warn={Boolean(errors.firstName)}
                     warnText={errors.firstName}
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
@@ -110,7 +108,7 @@ const ContactForm = () => {
                     labelText="Last Name"
                     placeholder="Black"
                     value={lastName}
-                    warn={validForm}
+                    warn={Boolean(errors.lastName)}
                     warnText={errors.lastName}
                     onChange={(e) => setLastName(e.target.value)}
                   />
@@ -132,7 +130,7 @@ const ContactForm = () => {
                       <FluidTextInput
                         labelText="PhoneNumber"
                         value={mobile}
-                        warn={validForm}
+                        warn={Boolean(errors.mobile)}
                         warnText={errors.mobile}
                         onChange={(e) =>
                           setMobile(e.target.value.toUpperCase())
@@ -144,7 +142,7 @@ const ContactForm = () => {
                     labelText="Email"
                     placeholder="Example@gmail.com"
                     value={email}
-                    warn={validForm}
+                    warn={Boolean(errors.email)}
                     warnText={errors.email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -152,7 +150,7 @@ const ContactForm = () => {
                     labelText="Text Area"
                     placeholder="Text Place"
                     value={textDescription}
-                    warn={validForm}
+                    warn={Boolean(errors.textDescription)}
                     warnText={errors.textDescription}
                     onChange={(e) => setTextDescription(e.target.value)}
                   />
